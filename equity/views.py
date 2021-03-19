@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 # Create your views here.
 def equity_list(requests):
     equities_list = bse_utils.get()
-    print(equities_list)
     equities = {'equities':equities_list}
     return  JsonResponse(equities)
 
@@ -34,16 +33,18 @@ class LargeResultsSetPagination(pagination.PageNumberPagination):
 
 
 class EquitiesView(generics.ListAPIView):
+    queryset = bse_utils.get()
     serializer_class = EquitySerializers
     pagination_class = LargeResultsSetPagination
-    def get_queryset(self):
-        date_str = self.request.query_params.get('date')
-        try :
-            if date_str:
-                date = datetime.strptime(date_str,"%Y%m%d")
-                return bse_utils.get(date)
+    # def get_queryset(self):
+    #     date_str = self.request.query_params.get('date')
+    #     print(date_str  )
+    #     try :
+    #         if date_str:
+    #             date = datetime.strptime(date_str,"%Y%m%d")
+    #             return bse_utils.get_normalize(date)
         
-        except Exception as e:
-            print('date not format')
-        return bse_utils.get()
+    #     except Exception as e:
+    #         print('date not format',ex)
+    #     return bse_utils.get_normalize()
 
