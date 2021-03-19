@@ -33,18 +33,16 @@ class LargeResultsSetPagination(pagination.PageNumberPagination):
 
 
 class EquitiesView(generics.ListAPIView):
-    queryset = bse_utils.get()
     serializer_class = EquitySerializers
     pagination_class = LargeResultsSetPagination
-    # def get_queryset(self):
-    #     date_str = self.request.query_params.get('date')
-    #     print(date_str  )
-    #     try :
-    #         if date_str:
-    #             date = datetime.strptime(date_str,"%Y%m%d")
-    #             return bse_utils.get_normalize(date)
+    def get_queryset(self):
+        date_str = self.request.query_params.get('date')
+        try :
+            if date_str:
+                date = datetime.strptime(date_str,"%Y%m%d")
+                return bse_utils.get(date)
         
-    #     except Exception as e:
-    #         print('date not format',ex)
-    #     return bse_utils.get_normalize()
+        except Exception as e:
+            print('date not format')
+        return bse_utils.get()
 
