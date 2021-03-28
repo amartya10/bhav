@@ -60,9 +60,11 @@ def _save_row(row,date_str):
             'LAST':row.LAST,
             'SC_GROUP':row.SC_GROUP,
         }
-        sc_date_key =f'BSE:EQ:DATE:{date_str}'
-        client.sadd(sc_date_key,sc_key)
-        client.hmset(c,sc_date_data)
+        client.hmset(sc_date_data_key,sc_date_data)
+
+    sc_date_key =f'BSE:EQ:DATE:{date_str}'
+    client.sadd(sc_date_key,sc_key)
+
 
 def _save(date_str):
     try:
@@ -71,8 +73,9 @@ def _save(date_str):
             zip_file = ZipFile(BytesIO(resp_data))
             csv_file = zip_file.open(f'EQ{date_str}.CSV')
             dfrm = pd.read_csv(csv_file)
-            for  index, row  in dfrm.iterrows():
+            for  row  in dfrm.itertuples():
                 _save_row(row,date_str)
+            #  lamda is better 
         else:
             raise Exception('resp not found')
     except Exception as e:
@@ -88,7 +91,7 @@ def save(date = latest()):
 
 def get(date = latest()):
 
-        # return [{'date':date}]
+    # return [{'date':date}]
     date_str = date.strftime(DATE_FORMAT)
     key =  f'BSE:EQ:DATE:{date_str}'
     if  not client.exists(key):
