@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_rq',
-    'equity',
-    'scheduler',    
+    'equity.apps.EquityConfig',
+    'scheduler.apps.SchedulerConfig',    
 ]
 
 MIDDLEWARE = [
@@ -136,10 +136,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 # )
 
 
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 100
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+#     'PAGE_SIZE': 100
+# }
 
 
 RQ_QUEUES = {
