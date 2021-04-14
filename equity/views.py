@@ -4,6 +4,14 @@ from datetime import datetime
 from django.http import HttpResponse,JsonResponse
 from rest_framework import serializers,pagination,generics
 from rest_framework.views import APIView
+
+from django.views.generic.list import ListView
+
+from rest_framework.exceptions import APIException
+from rest_framework import status
+
+
+import logging
 # Create your views here.
 def equity_list(requests):
     equities_list = bse_utils.get()
@@ -25,22 +33,30 @@ class EquitySerializers(serializers.Serializer):
     NO_TRADES = serializers.FloatField()
     NET_TURNOV = serializers.FloatField()
 
-
 class LargeResultsSetPagination(pagination.PageNumberPagination):
     page_size = 25
     page_size_query_param = 'page_size'
 
+class NotFound(APIException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = ('bad_request.')
+    default_code = 'bad_request'
 
-class EquitiesView(generics.ListAPIView):
-    serializer_class = EquitySerializers
-    pagination_class = LargeResultsSetPagination
+
+class EquitiesView(APIView):
     
-    def get_queryset(self):
-        date_str = self.request.query_params.get('date')
-        try :
-            if date_str:
-                date = datetime.strptime(date_str,"%Y%m%d")
-                return bse_utils.get(date)
-        except Exception as e:
-            print('date not format')
-        return bse_utils.get()
+    def get(self,request,*args,**kwargs):
+        result = {}
+        date = self.kwargs.get('date')
+        query = self.request.query_params.get('q')
+        page = self.request.query_params.get('page')
+        limit = self.request.query_params.get('limit')
+        if date != None:
+            try :
+               date =  datetime.strptime(date,"%d-%m-%Y")
+            except Exception as e:
+                data = { 'error' : 'URL date format incorrect dd-mm-yyyy'}
+                raise NotFound(data)
+        result = bse_utils.get(date,query,page,limit)
+        return JsonResponse(    )
+    
