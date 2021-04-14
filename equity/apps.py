@@ -4,4 +4,4 @@ class EquityConfig(AppConfig):
     name = 'equity'
 
     def ready(self):
-        bse_utils.index(self)
+        bse_utils.index()
