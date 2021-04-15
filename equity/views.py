@@ -58,5 +58,5 @@ class EquitiesView(APIView):
                 data = { 'error' : 'URL date format incorrect dd-mm-yyyy'}
                 raise NotFound(data)
         result = bse_utils.get(date,query,page,limit)
-        return JsonResponse(    )
+        return JsonResponse(result)
     
