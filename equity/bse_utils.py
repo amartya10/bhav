@@ -11,7 +11,7 @@ SC_KEY_FORMAT = 'BSE:BHAV:EQ:'
 
 KEY_DATE_FORMAT ='BSE:BAHV:DATE'
 SC_DATE_KEY_FORMAT =  ':DATE:'
-client = Redis(host='localhost', port=6379, decode_responses=True)
+client = Redis(host='redis', port=6379, decode_responses=True)
 
 
 def latest():
@@ -41,8 +41,8 @@ def _save_row(row,date_str):
 
     if not client.exists(sc_key):
         sc_info_data = {
-        'SC_NAME':row.SC_NAME,
-        'SC_TYPE':row.SC_TYPE,
+        'SC_NAME':str(row.SC_NAME).strip(),
+        'SC_TYPE':str(row.SC_TYPE).strip(),
         'SC_CODE':row.SC_CODE,
         }
         client.hmset(sc_key,sc_info_data)
@@ -59,7 +59,7 @@ def _save_row(row,date_str):
             'NO_TRADES':row.NO_TRADES,
             'LOW':row.LOW,
             'LAST':row.LAST,
-            'SC_GROUP':row.SC_GROUP,
+            'SC_GROUP':str(row.SC_GROUP).strip(),
         }
         client.hmset(sc_date_data_key,sc_date_data)
 
@@ -160,8 +160,11 @@ def get(date = None,query = None,page =  None,limit = None ):
     result = {
         'count':count,
         'equities':equities,
-        'next_page':next_page,
-        'prev_page':prev_page,
+        'links':{
+            'next_page':next_page,
+            'prev_page':prev_page,
+            },
+        'date':date
     }
     return result
 
