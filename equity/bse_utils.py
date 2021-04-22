@@ -6,8 +6,9 @@ import requests as req
 from redis import Redis
 import pandas as pd
 from zipfile import ZipFile
+import csv
 DATE_FORMAT = "%d%m%y"
-SC_KEY_FORMAT = 'BSE:BHAV:EQ:'
+SC_KEY_FORMAT = 'BSE:EQ:SC_CODE:'
 
 KEY_DATE_FORMAT ='BSE:BAHV:DATE'
 SC_DATE_KEY_FORMAT =  ':DATE:'
@@ -102,6 +103,14 @@ def search(query,date,start,end):
     results = client.execute_command(search_query)
     return results
 
+def getScript(scCode,dateFormated):
+    scDateKey = f'{scCode}:DATE:{dateFormated}'
+    if client.exists(scCode) and client.exists(scDateKey) :
+        sc_info = client.hgetall(scCode)    
+        sc_date_data = client.hgetall(scDateKey) 
+        sc =  {**sc_info,**sc_date_data}
+        return sc
+
 
 def get(date = None,query = None,page =  None,limit = None ):
     scripts = []
@@ -150,12 +159,9 @@ def get(date = None,query = None,page =  None,limit = None ):
     equities = [] 
 
     for script in scripts:
-        sc_date_key = f'{script}:DATE:{date_str}'
-        if client.exists(script) and client.exists(sc_date_key):
-            sc_info = client.hgetall(script)    
-            sc_date_data = client.hgetall(sc_date_key) 
-            sc =  {**sc_info,**sc_date_data}
-            equities.append(sc)
+        data  = getScript(script,date_str)
+        if data:
+            equities.append(data)
 
     result = {
         'count':count,
@@ -179,6 +185,7 @@ def index():
         PREFIX 1 BSE:EQ:SC_CODE \
         SCHEMA SC_CODE TEXT SC_NAME TEXT'
     client.execute_command(index_query)
+
 
 
 

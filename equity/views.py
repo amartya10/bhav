@@ -9,7 +9,7 @@ from django.views.generic.list import ListView
 
 from rest_framework.exceptions import APIException
 from rest_framework import status
-
+import csv
 
 import logging
 # Create your views here.
@@ -60,3 +60,36 @@ class EquitiesView(APIView):
         result = bse_utils.get(date,query,page,limit)
         return JsonResponse(result)
     
+
+class  EquityExport(APIView):
+
+    def post(self,request,*args,**kwargs):
+
+        csv_headers = ['SC_CODE','SC_NAME',\
+        'SC_GROUP','SC_TYPE','OPEN','HIGH',\
+        'LOW','CLOSE','LAST','PREVCLOSE',\
+        'NO_TRADES','NO_OF_SHRS','NET_TURNOV']
+
+        response = HttpResponse(content_type='application/csv')
+        headers={'Content-Disposition': 'attachment; filename=response.csv'},
+        writer = csv.writer(response)
+
+        writer.writerow(csv_headers)
+        date = self.kwargs.get('date')
+        if date != None:
+            date =  datetime.strptime(date,"%d-%m-%Y")
+        else:
+            date = bse_utils.latest()
+
+        dateFormated = date.strftime(bse_utils.DATE_FORMAT)
+        print(dateFormated)
+
+        scripts = request.data
+        for script in scripts:
+            script  = f'{bse_utils.SC_KEY_FORMAT}{script}'
+            scData = bse_utils.getScript(script,dateFormated)
+            listData = []
+            for csv_header  in csv_headers:
+                listData.append(scData[csv_header])
+            writer.writerow(listData)
+        return response
