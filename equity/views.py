@@ -10,7 +10,6 @@ from django.views.generic.list import ListView
 from rest_framework.exceptions import APIException
 from rest_framework import status
 import csv
-
 import logging
 # Create your views here.
 def equity_list(requests):
@@ -82,14 +81,15 @@ class  EquityExport(APIView):
             date = bse_utils.latest()
 
         dateFormated = date.strftime(bse_utils.DATE_FORMAT)
-        print(dateFormated)
 
         scripts = request.data
         for script in scripts:
             script  = f'{bse_utils.SC_KEY_FORMAT}{script}'
             scData = bse_utils.getScript(script,dateFormated)
-            listData = []
-            for csv_header  in csv_headers:
-                listData.append(scData[csv_header])
-            writer.writerow(listData)
+            if scData:
+                listData = []
+                for csv_header  in csv_headers:
+                    listData.append(scData[csv_header])
+                writer.writerow(listData)
+    
         return response
