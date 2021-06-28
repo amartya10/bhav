@@ -15,7 +15,7 @@ Daily BSE Market Update API
     query paramters: 
     optional(limit = 100 & page = 0 ) default,
     
-    curl -i -H 'Accept: application/json' http://localhost:8000/api/equity
+    curl -i -H 'Accept: application/json' http://localhost:8000/api/equity/
      
 `api/equity/search/?q={query}`
 
