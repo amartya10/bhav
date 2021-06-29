@@ -12,8 +12,7 @@ RUN pipenv install --system --dev && rm -rf /root/.cache/pip
 
 COPY ./ ./
 
-RUN pylint app/
 
 EXPOSE 8000
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
