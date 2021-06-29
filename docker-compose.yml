@@ -1,17 +1,42 @@
 version: '3.8'
 services:
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8000:8000
-    volumes:
-      - .:/app
-    depends_on:
-      - redis
+
   redis:
     image: "redislabs/redisearch:latest"
     ports:
      - "6379:6379"
+     
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+    environment:
+      CONTAINER_TYPE: backend
+    ports:
+      - 8000:8000
+    depends_on:
+      - redis
+  # worker:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     volumes:
+  #     - ./:/app
+  #   environment:
+  #     CONTAINER_TYPE: worker
+ 
+  #   depends_on:
+  #     - redis
+  # scheduler:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./:/app
+  #   environment:
+  #     CONTAINER_TYPE: scheduler
 
+  #   depends_on:
+  #     - redis
