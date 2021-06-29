@@ -1,9 +1,11 @@
 # bhav
 
-Daily BSE Market Update API 
+Daily BSE Market Update API
+
+Data Source: https://www.bseindia.com/markets/MarketInfo/BhavCopy.aspx)
 
 ## Run 
-    docker-compose up .
+    docker-compose up
  
 ## End-Points
 ### GET
