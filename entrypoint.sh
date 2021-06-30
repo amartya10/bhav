@@ -4,7 +4,7 @@ set -m
 
 if [ $CONTAINER_TYPE = 'backend' ]
 then 
-	exec python manage.py runserver
+	exec python manage.py runserver 0.0.0.0:8000
 
 elif [ $CONTAINER_TYPE = 'scheduler' ]
 then	
