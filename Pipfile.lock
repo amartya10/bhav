@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "aa04f062cd04507167608e7f7d4f79d1b871086e37ab18124585d5ce8c415e87"
+            "sha256": "689364516d31e26d467146f141d2c4075cf6ddd15e1732f2fb8ba697e332834c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -47,6 +47,14 @@
             ],
             "index": "pypi",
             "version": "==8.0.1"
+        },
+        "croniter": {
+            "hashes": [
+                "sha256:0f97b361fe343301a8f66f852e7d84e4fb7f21379948f71e1bbfe10f5d015fbd",
+                "sha256:a70dfc9d52de9fc1a886128b9148c89dd9e76b67d55f46516ca94d2d73d58219"
+            ],
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "version": "==1.0.15"
         },
         "django": {
             "hashes": [
@@ -185,6 +193,14 @@
             ],
             "index": "pypi",
             "version": "==1.8.1"
+        },
+        "rq-scheduler": {
+            "hashes": [
+                "sha256:da94e9b6badf112995ff38fe16192e4f4c43c412b3c9614684ed8c8f7ca517d2",
+                "sha256:db79bb56cdbc4f7ffdd8bd659e389e91aa0db9c1abf002dc46f5dd6f0dbd2910"
+            ],
+            "index": "pypi",
+            "version": "==0.11.0"
         },
         "six": {
             "hashes": [
