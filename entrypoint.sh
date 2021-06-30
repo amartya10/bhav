@@ -2,19 +2,16 @@
 
 set -m 	
 
-if [$CONTAINER_TYPE = "backend"]
+if [ $CONTAINER_TYPE = 'backend' ]
 then 
-	echo --- backend --- 
 	exec python manage.py runserver
 
-elif [$CONTAINER_TYPE = "scheduler"]
+elif [ $CONTAINER_TYPE = 'scheduler' ]
 then	
-	echo --- scheduler --- 
 	exec python manage.py rqscheduler
 
-elif [$CONTAINER_TYPE = "worker"]
+elif [ $CONTAINER_TYPE = 'worker' ] 
 then
-	echo --- worker --- 
 	exec python manage.py rqworker
 
 else
